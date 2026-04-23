@@ -13,8 +13,9 @@ router.get('/jobs/search-stream', async (req, res) => {
 
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive'
+    'Cache-Control': 'no-cache, no-transform', // no-transform is critical for proxies
+    'Connection': 'keep-alive',
+    'X-Accel-Buffering': 'no' // specifically tells Nginx (often used by hosts) not to buffer
   });
 
   const sendEvent = (data) => {
@@ -44,11 +45,12 @@ router.get('/search-stream', async (req, res) => {
     return res.status(400).json({ error: 'Category and location are required' });
   }
 
-  res.writeHead(200, {
-    'Content-Type': 'text/event-stream',
-    'Cache-Control': 'no-cache',
-    'Connection': 'keep-alive'
-  });
+res.writeHead(200, {
+  'Content-Type': 'text/event-stream',
+  'Cache-Control': 'no-cache, no-transform', // no-transform is critical for proxies
+  'Connection': 'keep-alive',
+  'X-Accel-Buffering': 'no' // specifically tells Nginx (often used by hosts) not to buffer
+});
 
   const sendEvent = (data) => {
     res.write(`data: ${JSON.stringify(data)}\n\n`);
