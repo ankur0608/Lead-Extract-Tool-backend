@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer-core');
+const { launchBrowser } = require('./browser');
 
 // Fast auto-scroll
 async function autoScroll(page, limit) {
@@ -78,11 +78,7 @@ async function extractLeads(category, location, limit = 10, onProgress = null) {
     const query = encodeURIComponent(`${category} in ${location}`);
     const url = `https://www.google.com/maps/search/${query}`;
     
-    const browser = await puppeteer.launch({
-        executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
-        headless: 'new',
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
+    const browser = await launchBrowser();
 
     const page = await browser.newPage();
     await page.setViewport({ width: 1280, height: 800 });
