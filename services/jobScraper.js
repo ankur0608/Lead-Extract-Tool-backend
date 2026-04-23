@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer-core');
+const { launchBrowser } = require('./browser');
 
 // ─── CONFIGURATION ────────────────────────────────────────────────────
 const CAREER_PATHS = [
@@ -425,11 +425,7 @@ async function scrapeJobsFromPage(browser, careerUrl, companyObj) {
 
 // ─── MAIN SEARCH FUNCTION ─────────────────────────────────────────────
 async function searchJobs(location, keyword, limit, onProgress) {
-  const browser = await puppeteer.launch({
-    executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe',
-    headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-  });
+  const browser = await launchBrowser();
 
   const page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 800 });
